@@ -30,14 +30,10 @@ Taller_EduConnect_Kong/
 ├── scripts/
 │   └── probar_trafico.ps1
 ├── diagramas/
-│   ├── Arquitectura_EduConnect.pdf
 │   └── Arquitectura_EduConnect.png
 ├── documentos/
-│   ├── Matriz_Evidencias_EduConnect.docx
 │   ├── Matriz_Evidencias_EduConnect.pdf
-│   ├── Informe_Tecnico_EduConnect.docx
 │   ├── Informe_Tecnico_EduConnect.pdf
-│   ├── Declaracion_IA_y_Fuentes.docx
 │   └── Declaracion_IA_y_Fuentes.pdf
 └── README.md
 ```
