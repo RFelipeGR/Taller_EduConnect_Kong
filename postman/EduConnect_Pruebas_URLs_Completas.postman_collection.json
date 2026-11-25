@@ -1,0 +1,338 @@
+{
+  "info": {
+    "_postman_id": "6c6b21ba-b2d3-45ba-8efc-f8f08db0b247",
+    "name": "EduConnect - Taller Kong Gateway (URLs completas)",
+    "description": "Colección con direcciones completas http://localhost:8000, sin variables, para ejecutar en el equipo que tenga Docker Compose y Kong activos. Contiene 11 solicitudes organizadas por cuatro carpetas, claves ficticias de laboratorio. Para pruebas de límite y fallos, leer instrucciones de cada solicitud. No ejecutar toda la colección esperando resultados independientes porque las peticiones comparten el contador de tráfico por consumidor.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Rutas correctas",
+      "item": [
+        {
+          "name": "GET Estudiantes — 200",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "apikey",
+                "value": "educonnect-demo-clave-2026",
+                "type": "text"
+              }
+            ],
+            "url": "http://localhost:8000/api/estudiantes",
+            "description": "API Key válida. Esperado: 200 y JSON de Estudiantes. Si recibes 429, espera una nueva ventana de 1 minuto."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 esperado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Matrículas — 200",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "apikey",
+                "value": "educonnect-demo-clave-2026",
+                "type": "text"
+              }
+            ],
+            "url": "http://localhost:8000/api/matriculas",
+            "description": "API Key válida. Esperado: 200 y JSON de Matrículas. Si recibes 429, espera una nueva ventana."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 esperado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Pagos — 200",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "apikey",
+                "value": "educonnect-demo-clave-2026",
+                "type": "text"
+              }
+            ],
+            "url": "http://localhost:8000/api/pagos",
+            "description": "API Key válida. Esperado: 200 y JSON de Pagos. Asegúrate de que el servicio pagos esté iniciado."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 esperado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Certificados — 200",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "apikey",
+                "value": "educonnect-demo-clave-2026",
+                "type": "text"
+              }
+            ],
+            "url": "http://localhost:8000/api/certificados",
+            "description": "API Key válida. Esperado: 200, sujeto a su límite especial de 2/minuto."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 esperado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 - Autenticación",
+      "item": [
+        {
+          "name": "GET Sin API Key — 401",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "url": "http://localhost:8000/api/estudiantes",
+            "description": "Sin header apikey. Esperado: 401 Unauthorized."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401 esperado\", function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET API Key incorrecta — 401",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "apikey",
+                "value": "clave-incorrecta",
+                "type": "text"
+              }
+            ],
+            "url": "http://localhost:8000/api/estudiantes",
+            "description": "Header apikey incorrecto. Esperado: 401 Unauthorized."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401 esperado\", function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET API Key válida — 200",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "apikey",
+                "value": "educonnect-demo-clave-2026",
+                "type": "text"
+              }
+            ],
+            "url": "http://localhost:8000/api/estudiantes",
+            "description": "Header apikey válido. Esperado: 200 mientras no se haya excedido el rate limit."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200 esperado\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - Errores",
+      "item": [
+        {
+          "name": "GET Ruta inexistente — 404",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "apikey",
+                "value": "educonnect-demo-clave-2026",
+                "type": "text"
+              }
+            ],
+            "url": "http://localhost:8000/api/noexiste",
+            "description": "No hay Route en Kong para esta URL. Esperado: 404 Not Found."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404 esperado\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Pagos detenido — error de backend",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "apikey",
+                "value": "educonnect-demo-clave-2026",
+                "type": "text"
+              }
+            ],
+            "url": "http://localhost:8000/api/pagos",
+            "description": "ANTES de enviar, desde la carpeta del proyecto: docker compose stop pagos. Después de observar el HTTP real (por ejemplo 502/503), RESTAURA: docker compose start pagos. El código exacto puede variar; documenta el observado. Si sale 429, espera a una nueva ventana de cuota."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Límites de tráfico",
+      "item": [
+        {
+          "name": "GET Estudiantes — límite 5/min",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "apikey",
+                "value": "educonnect-demo-clave-2026",
+                "type": "text"
+              }
+            ],
+            "url": "http://localhost:8000/api/estudiantes",
+            "description": "En una ventana nueva de un minuto, pulsa Send SEIS VECES seguidas. Esperado: primeras 5 con 200, 6.ª con 429. Es una prueba manual; no ejecutar la colección entera para demostrar la secuencia."
+          },
+          "response": []
+        },
+        {
+          "name": "GET Certificados — límite 2/min",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "apikey",
+                "value": "educonnect-demo-clave-2026",
+                "type": "text"
+              }
+            ],
+            "url": "http://localhost:8000/api/certificados",
+            "description": "En una ventana nueva de un minuto, pulsa Send TRES VECES seguidas. Esperado: primeras 2 con 200, 3.ª con 429. Es una prueba manual."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": []
+}

@@ -1,0 +1,93 @@
+
+_format_version: "3.0"
+_transform: true
+
+services:
+
+  - name: servicio-estudiantes
+    url: http://estudiantes:3000/estudiantes
+    routes:
+      - name: ruta-estudiantes
+        paths:
+          - /api/estudiantes
+        methods:
+          - GET
+        strip_path: true
+        path_handling: v0
+        protocols:
+          - http
+          - https
+
+  - name: servicio-matriculas
+    url: http://matriculas:3000/matriculas
+    routes:
+      - name: ruta-matriculas
+        paths:
+          - /api/matriculas
+        methods:
+          - GET
+        strip_path: true
+        path_handling: v0
+        protocols:
+          - http
+          - https
+
+  - name: servicio-pagos
+    url: http://pagos:3000/pagos
+    routes:
+      - name: ruta-pagos
+        paths:
+          - /api/pagos
+        methods:
+          - GET
+        strip_path: true
+        path_handling: v0
+        protocols:
+          - http
+          - https
+
+  - name: servicio-certificados
+    url: http://certificados:3000/certificados
+    routes:
+      - name: ruta-certificados
+        paths:
+          - /api/certificados
+        methods:
+          - GET
+        strip_path: true
+        path_handling: v0
+        protocols:
+          - http
+          - https
+
+  
+consumers:
+  - username: socio-externo
+    keyauth_credentials:
+      - key: educonnect-demo-clave-2026
+
+
+
+
+plugins:
+  - name: key-auth
+    config:
+      key_names:
+        - apikey
+      hide_credentials: true
+
+  - name: rate-limiting
+    consumer: socio-externo
+    config:
+      minute: 5
+      limit_by: consumer
+      policy: local
+
+  - name: rate-limiting
+    consumer: socio-externo
+    route: ruta-certificados
+    config:
+      minute: 2
+      limit_by: consumer
+      policy: local
+

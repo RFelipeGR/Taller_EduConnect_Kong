@@ -1,0 +1,68 @@
+
+services:
+
+  estudiantes:
+    image: python:3.12-alpine
+    command: ["python", "-u", "/app/server.py"]
+    environment:
+      SERVICE_NAME: Estudiantes
+      SERVICE_PATH: /estudiantes
+      SERVICE_RESPONSE: '{"id":101,"nombre":"Ana Perez"}'
+    volumes:
+      - ./mocks:/app:ro
+    restart: unless-stopped
+
+  matriculas:
+    image: python:3.12-alpine
+    command: ["python", "-u", "/app/server.py"]
+    environment:
+      SERVICE_NAME: Matriculas
+      SERVICE_PATH: /matriculas
+      SERVICE_RESPONSE: '{"id":501,"estudianteId":101,"estado":"ACTIVA"}'
+    volumes:
+      - ./mocks:/app:ro
+    restart: unless-stopped
+
+  pagos:
+    image: python:3.12-alpine
+    command: ["python", "-u", "/app/server.py"]
+    environment:
+      SERVICE_NAME: Pagos
+      SERVICE_PATH: /pagos
+      SERVICE_RESPONSE: '{"id":701,"matriculaId":501,"valor":150.00,"estado":"PENDIENTE"}'
+    volumes:
+      - ./mocks:/app:ro
+    restart: unless-stopped
+
+  certificados:
+    image: python:3.12-alpine
+    command: ["python", "-u", "/app/server.py"]
+    environment:
+      SERVICE_NAME: Certificados
+      SERVICE_PATH: /certificados
+      SERVICE_RESPONSE: '{"id":901,"estudianteId":101,"tipo":"Academico","estado":"EMITIDO"}'
+    volumes:
+      - ./mocks:/app:ro
+    restart: unless-stopped
+
+
+  kong:
+    image: kong:3.9.5
+    restart: unless-stopped
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong/kong.yml
+      KONG_PROXY_LISTEN: "0.0.0.0:8000"
+      KONG_ADMIN_LISTEN: "127.0.0.1:8001"
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ANONYMOUS_REPORTS: "off"
+    volumes:
+      - ./kong.yml:/kong/kong.yml:ro
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      - estudiantes
+      - matriculas
+      - pagos
+      - certificados
